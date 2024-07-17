@@ -1,5 +1,5 @@
 portaudio19-dev
 ffmpeg
-libstdc++6
+libstdc++5
 build-essential
 gcc
