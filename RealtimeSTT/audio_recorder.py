@@ -493,8 +493,8 @@ class AudioToTextRecorder:
                     device=self.device,
                     compute_type=self.compute_type,
                     device_index=self.gpu_device_index,
-                    download_root="models",
-                    local_files_only=True,
+                    # download_root="models",
+                    # local_files_only=True,
                 )
 
             except Exception as e:
@@ -712,8 +712,8 @@ class AudioToTextRecorder:
                 device=device,
                 compute_type=compute_type,
                 device_index=gpu_device_index,
-                download_root="models",
-                local_files_only=True,
+                # download_root="models",
+                # local_files_only=True,
             )
 
         except Exception as e:
