@@ -14,7 +14,7 @@ import sys
 sys.path.append('models')
 from cn_clip.clip.model import convert_weights, CLIP
 from cn_clip.training.main import convert_models_to_fp32
-from cn_clip.clip import image_transform, tokenize
+from cn_clip.clip import image_transform, tokenize, load_from_name
 
 device = "cpu" #"cuda" if torch.cuda.is_available() else "cpu" # 实际情况无GPU
 
@@ -35,48 +35,50 @@ class CNCLIPEmbeddings(BaseModel, Embeddings):
         """Validate that open_clip and torch libraries are installed."""
         try:
 
-            # Fall back to class defaults if not provided
-            vision_model = values.get("vision_model", cls.__fields__["vision_model"].default)
-            text_model = values.get("text_model", cls.__fields__["text_model"].default)
-            checkpoint = values.get("checkpoint", cls.__fields__["checkpoint"].default)
-            precision = values.get("precision", cls.__fields__["precision"].default)
+            # # Fall back to class defaults if not provided
+            # vision_model = values.get("vision_model", cls.__fields__["vision_model"].default)
+            # text_model = values.get("text_model", cls.__fields__["text_model"].default)
+            # checkpoint = values.get("checkpoint", cls.__fields__["checkpoint"].default)
+            # precision = values.get("precision", cls.__fields__["precision"].default)
 
-            # Initialize the model.
-            vision_model_config_file = f"models/cn_clip/clip/model_configs/{vision_model.replace('/', '-')}.json"
-            print('Loading clip vision model config from', vision_model_config_file)
-            assert os.path.exists(vision_model_config_file)
+            # # Initialize the model.
+            # vision_model_config_file = f"models/cn_clip/clip/model_configs/{vision_model.replace('/', '-')}.json"
+            # print('Loading clip vision model config from', vision_model_config_file)
+            # assert os.path.exists(vision_model_config_file)
             
-            text_model_config_file = f"models/cn_clip/clip/model_configs/{text_model.replace('/', '-')}.json"
-            print('Loading clip text model config from', text_model_config_file)
-            assert os.path.exists(text_model_config_file)
+            # text_model_config_file = f"models/cn_clip/clip/model_configs/{text_model.replace('/', '-')}.json"
+            # print('Loading clip text model config from', text_model_config_file)
+            # assert os.path.exists(text_model_config_file)
 
-            with open(vision_model_config_file, 'r') as fv, open(text_model_config_file, 'r') as ft:
-                model_info = json.load(fv)
-                if isinstance(model_info['vision_layers'], str):
-                    model_info['vision_layers'] = eval(model_info['vision_layers'])        
-                for k, v in json.load(ft).items():
-                    model_info[k] = v
+            # with open(vision_model_config_file, 'r') as fv, open(text_model_config_file, 'r') as ft:
+            #     model_info = json.load(fv)
+            #     if isinstance(model_info['vision_layers'], str):
+            #         model_info['vision_layers'] = eval(model_info['vision_layers'])        
+            #     for k, v in json.load(ft).items():
+            #         model_info[k] = v
 
-            model = CLIP(**model_info).to(device)
-            convert_weights(model)
+            # model = CLIP(**model_info).to(device)
+            # convert_weights(model)
 
-            #gpu = 0 实际应用无GPU
-            #torch.cuda.set_device(gpu)
-            if precision == "amp" or precision == "fp32":
-                convert_models_to_fp32(model)
-            #model.cuda(gpu)
-            if precision == "fp16":
-                convert_weights(model)
+            # #gpu = 0 实际应用无GPU
+            # #torch.cuda.set_device(gpu)
+            # if precision == "amp" or precision == "fp32":
+            #     convert_models_to_fp32(model)
+            # #model.cuda(gpu)
+            # if precision == "fp16":
+            #     convert_weights(model)
 
-            # Resume from a checkpoint.
-            print("Begin to load clip model checkpoint from {}.".format(checkpoint))
-            assert os.path.exists(checkpoint), "The checkpoint file {} not exists!".format(checkpoint)
-            # Map model to be loaded to specified single gpu.
-            checkpoint = torch.load(checkpoint, map_location='cpu')
-            sd = checkpoint["state_dict"]
-            if next(iter(sd.items()))[0].startswith('module'):
-                sd = {k[len('module.'):]: v for k, v in sd.items() if "bert.pooler" not in k}
-            model.load_state_dict(sd)
+            # # Resume from a checkpoint.
+            # print("Begin to load clip model checkpoint from {}.".format(checkpoint))
+            # assert os.path.exists(checkpoint), "The checkpoint file {} not exists!".format(checkpoint)
+            # # Map model to be loaded to specified single gpu.
+            # checkpoint = torch.load(checkpoint, map_location='cpu')
+            # sd = checkpoint["state_dict"]
+            # if next(iter(sd.items()))[0].startswith('module'):
+            #     sd = {k[len('module.'):]: v for k, v in sd.items() if "bert.pooler" not in k}
+            # model.load_state_dict(sd)
+
+            model = load_from_name("ViT-B-16", device=device, download_root='./')
 
             # preprocess
             preprocess_val = image_transform(image_size=224)
