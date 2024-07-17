@@ -1,3 +1,5 @@
 portaudio19-dev
 ffmpeg
-g++
+build-essential
+gcc
+gcc-c++
