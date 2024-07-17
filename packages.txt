@@ -1,3 +1,3 @@
 portaudio19-dev
 ffmpeg
-libstdc++.so.6
+g++
