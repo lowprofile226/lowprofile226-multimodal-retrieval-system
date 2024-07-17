@@ -18,4 +18,3 @@ chromadb
 
 pymupdf
 opencc
-requires
