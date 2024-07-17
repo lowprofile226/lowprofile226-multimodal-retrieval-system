@@ -10,8 +10,8 @@ from langchain.pydantic_v1 import BaseModel, root_validator
 from langchain_core.embeddings import Embeddings
 
 # from transform import image_transform_v2
-import sys
-sys.path.append('models')
+# import sys
+# sys.path.append('models')
 from cn_clip.clip.model import convert_weights, CLIP
 from cn_clip.training.main import convert_models_to_fp32
 from cn_clip.clip import image_transform, tokenize

@@ -28,11 +28,11 @@ class M3EEmbeddings(BaseModel, Embeddings):
             values (Dict): 包含配置信息的字典。如果环境中有M3E库，则将返回实例化的M3E类；否则将报错 'ModuleNotFoundError: No module named 'M3E''.
         """
         # 下载或加载模型，原路径为./.cache/huggingface/hub/models--moka-ai--m3e-base
-        # values["client"] = SentenceTransformer('moka-ai/m3e-base')#, cache_folder=r"./.cache/huggingface/hub")#.cuda() 实际情况无GPU
+        values["client"] = SentenceTransformer('moka-ai/m3e-base')#, cache_folder=r"./.cache/huggingface/hub")#.cuda() 实际情况无GPU
         # values["client"] = SentenceTransformer('./.cache/huggingface/hub/models--moka-ai--m3e-base', cache_folder='./.cache/huggingface/hub/models--moka-ai--m3e-base')
-        path = 'models\\models--moka-ai--m3e-base\\snapshots\\764b537a0e50e5c7d64db883f2d2e051cbe3c64c'
-        print('Loading m3e text model from', path)
-        values["client"] = SentenceTransformer(path).to(device)
+        #path = 'models\\models--moka-ai--m3e-base\\snapshots\\764b537a0e50e5c7d64db883f2d2e051cbe3c64c'
+        #print('Loading m3e text model from', path)
+        #values["client"] = SentenceTransformer(path).to(device)
         return values
     
     def embed_query(self, text: str) -> List[float]:
