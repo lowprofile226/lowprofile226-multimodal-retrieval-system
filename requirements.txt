@@ -18,3 +18,4 @@ chromadb
 
 pymupdf
 opencc
+libstdc++6
