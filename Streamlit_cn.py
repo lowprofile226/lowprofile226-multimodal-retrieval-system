@@ -1,6 +1,6 @@
 import base64
 from io import BytesIO
-from opencc import OpenCC
+#from opencc import OpenCC
 
 from PIL import Image
 import os
@@ -36,8 +36,8 @@ def init():
         'min_gap_between_recordings': 0,
     }
     recorder = AudioToTextRecorder(**recorder_config)
-    cc = OpenCC('t2s')
-    return m3e_embedding, clip_embedding, recorder, cc
+    #cc = OpenCC('t2s')
+    return m3e_embedding, clip_embedding, recorder#, cc
 
 @st.cache_resource
 def get_vectordb(_m3e_embd, _clip_embd):
@@ -74,7 +74,7 @@ def resetrecording():
 # Streamlit 应用程序界面
 if __name__ == '__main__':
     # 初始化模型与向量库
-    m3e_embedding, clip_embedding, recorder, cc = init()
+    m3e_embedding, clip_embedding, recorder = init()
     get_vectordb(m3e_embedding, clip_embedding)
 
     # 加载共享变量用于跟踪对话历史
@@ -104,13 +104,13 @@ if __name__ == '__main__':
         if st.session_state.recording == 1:
             st.sidebar.info('正在录音...')
             # text = cc.convert('这是中文，支持詞彙級別的轉換')
-            text = cc.convert(recorder.text())
+            text = recorder.text()
             st.sidebar.info('录音结束...')
             st.session_state.recording = 3
         elif st.session_state.recording == 2:
             st.sidebar.info('正在录音...')
             # st.session_state.text_input = '456'
-            st.session_state.text_input = cc.convert(recorder.text())
+            st.session_state.text_input = recorder.text()
             st.sidebar.info('录音结束...')
             st.session_state.recording = 4
         if st.session_state.recording == 3:
