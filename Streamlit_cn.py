@@ -20,7 +20,7 @@ warnings.filterwarnings("ignore", category=UserWarning, message="1Torch was not 
 import requests
 url='https://clip-cn-beijing.oss-cn-beijing.aliyuncs.com/checkpoints/clip_cn_vit-b-16.pt'
 myfile=requests.get(url)
-open('./models/pretrained_weights/clip_cn_vit-b-16.pt','wb').write(myfile.content)
+open('/mount/src/multimodal-retrieval-system/models/pretrained_weights/clip_cn_vit-b-16.pt','wb').write(myfile.content)
 
 # @st.cache_data
 @st.cache_resource
