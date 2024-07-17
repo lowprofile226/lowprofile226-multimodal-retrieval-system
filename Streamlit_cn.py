@@ -17,10 +17,6 @@ from audio_recorder import AudioToTextRecorder
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, message="Torchaudio's I/O functions now support par-call bakcend dispatch.*")# streamlit版本问题，可忽略
 warnings.filterwarnings("ignore", category=UserWarning, message="1Torch was not compiled with flash attention.*")# 可用GPU的提示，忽略
-import requests
-url='https://clip-cn-beijing.oss-cn-beijing.aliyuncs.com/checkpoints/clip_cn_vit-b-16.pt'
-myfile=requests.get(url)
-open('/mount/src/multimodal-retrieval-system/models/pretrained_weights/clip_cn_vit-b-16.pt','wb').write(myfile.content)
 
 # @st.cache_data
 @st.cache_resource

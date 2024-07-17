@@ -605,8 +605,8 @@ class AudioToTextRecorder:
         # Setup voice activity detection model Silero VAD
         try:
             self.silero_vad_model, _ = torch.hub.load(
-                # repo_or_dir="snakers4/silero-vad",
-                repo_or_dir="models\snakers4_silero-vad_master",
+                repo_or_dir="snakers4/silero-vad",
+                # repo_or_dir="models\snakers4_silero-vad_master",
                 model="silero_vad",
                 source='local',
                 verbose=False,
