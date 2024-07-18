@@ -18,3 +18,4 @@ chromadb
 
 pymupdf
 opencc
+audio_recorder_streamlit

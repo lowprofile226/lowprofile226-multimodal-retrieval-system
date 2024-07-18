@@ -26,6 +26,7 @@ Author: Kolja Beigel
 
 """
 
+from audio_recorder_streamlit import audio_recorder
 from typing import Iterable, List, Optional, Union
 import torch.multiprocessing as mp
 import torch
@@ -791,34 +792,35 @@ class AudioToTextRecorder:
             Exception: If there is an error while initializing the audio
               recording.
         """
-        try:
-            audio_interface = pyaudio.PyAudio()
-            if input_device_index is None:
-                default_device = audio_interface.get_default_input_device_info()
-                input_device_index = default_device['index']
-            stream = audio_interface.open(
-                rate=sample_rate,
-                format=pyaudio.paInt16,
-                channels=1,
-                input=True,
-                frames_per_buffer=buffer_size,
-                input_device_index=input_device_index,
-                )
+        # try:
+        #     audio_interface = pyaudio.PyAudio()
+        #     if input_device_index is None:
+        #         default_device = audio_interface.get_default_input_device_info()
+        #         input_device_index = default_device['index']
+        #     stream = audio_interface.open(
+        #         rate=sample_rate,
+        #         format=pyaudio.paInt16,
+        #         channels=1,
+        #         input=True,
+        #         frames_per_buffer=buffer_size,
+        #         input_device_index=input_device_index,
+        #         )
 
-        except Exception as e:
-            logging.exception("Error initializing pyaudio "
-                              f"audio recording: {e}"
-                              )
-            raise
+        # except Exception as e:
+        #     logging.exception("Error initializing pyaudio "
+        #                       f"audio recording: {e}"
+        #                       )
+        #     raise
 
-        logging.debug("Audio recording (pyAudio input "
-                      "stream) initialized successfully"
-                      )
+        # logging.debug("Audio recording (pyAudio input "
+        #               "stream) initialized successfully"
+        #               )
 
         try:
             while not shutdown_event.is_set():
                 try:
-                    data = stream.read(buffer_size)
+                    # data = stream.read(buffer_size)
+                    data = audio_recorder()
 
                 except OSError as e:
                     if e.errno == pyaudio.paInputOverflowed:
@@ -845,10 +847,10 @@ class AudioToTextRecorder:
             logging.debug("Audio data worker process "
                           "finished due to KeyboardInterrupt"
                           )
-        finally:
-            stream.stop_stream()
-            stream.close()
-            audio_interface.terminate()
+        # finally:
+            # stream.stop_stream()
+            # stream.close()
+            # audio_interface.terminate()
 
     def wakeup(self):
         """
