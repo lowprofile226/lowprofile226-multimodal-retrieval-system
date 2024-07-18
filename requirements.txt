@@ -19,3 +19,4 @@ chromadb
 pymupdf
 opencc
 audio_recorder_streamlit
+protobuf==3.20.1
