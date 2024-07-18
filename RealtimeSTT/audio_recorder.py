@@ -26,6 +26,7 @@ Author: Kolja Beigel
 
 """
 
+import streamlit as st
 from audio_recorder_streamlit import audio_recorder
 from typing import Iterable, List, Optional, Union
 import torch.multiprocessing as mp
@@ -819,8 +820,12 @@ class AudioToTextRecorder:
         try:
             while not shutdown_event.is_set():
                 try:
+                    if 'key_counter' not in st.session_state:
+                        st.session_state.key_counter = 0
                     # data = stream.read(buffer_size)
-                    data = audio_recorder()
+                    unique_key = "audio_recorder_" + str(st.session_state.get("key_counter", 0))
+                    st.session_state["key_counter"] = st.session_state.get("key_counter", 0) + 1
+                    data = audio_recorder(key=unique_key)
 
                 except OSError as e:
                     if e.errno == pyaudio.paInputOverflowed:
